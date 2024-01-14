@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище I11_Leonov_AISModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ARMOR_TYPE_ID" Type="int" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ARMOR_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ELEMENT_OF_ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DEV_ID" Type="char" MaxLength="8" />
+          <Property Name="PART_ID" Type="int" Nullable="false" />
+          <Property Name="ARMOR_ID" Type="int" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IMG_URL" Type="varchar" MaxLength="500" />
+          <Property Name="WEIGHT" Type="float" Nullable="false" />
+          <Property Name="DEFENCE" Type="int" Nullable="false" />
+          <Property Name="PRICE" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PART_OF_ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "8I11_Leonov_AIS.dbo.ARMOR_DEFENCE_VIEW" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="ARMOR_DEFENCE_VIEW">
+          <Key>
+            <PropertyRef Name="NAME" />
+            <PropertyRef Name="ARMOR_TYPE_ID" />
+          </Key>
+          <Property Name="NAME" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DEFENCE" Type="int" />
+          <Property Name="ARMOR_TYPE_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ARMOR__ARMOR_TYP__4AB81AF0">
+          <End Role="ARMOR_TYPE" Type="Self.ARMOR_TYPE" Multiplicity="1" />
+          <End Role="ARMOR" Type="Self.ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARMOR_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ARMOR">
+              <PropertyRef Name="ARMOR_TYPE_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ELEMENT_O__ARMOR__5535A963">
+          <End Role="ARMOR" Type="Self.ARMOR" Multiplicity="1" />
+          <End Role="ELEMENT_OF_ARMOR" Type="Self.ELEMENT_OF_ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARMOR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ELEMENT_OF_ARMOR">
+              <PropertyRef Name="ARMOR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ELEMENT_O__PART___5441852A">
+          <End Role="PART_OF_ARMOR" Type="Self.PART_OF_ARMOR" Multiplicity="1" />
+          <End Role="ELEMENT_OF_ARMOR" Type="Self.ELEMENT_OF_ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_OF_ARMOR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ELEMENT_OF_ARMOR">
+              <PropertyRef Name="PART_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище I11_Leonov_AISModelContainer">
+          <EntitySet Name="ARMOR" EntityType="Self.ARMOR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ARMOR_TYPE" EntityType="Self.ARMOR_TYPE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ELEMENT_OF_ARMOR" EntityType="Self.ELEMENT_OF_ARMOR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PART_OF_ARMOR" EntityType="Self.PART_OF_ARMOR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ARMOR_DEFENCE_VIEW" EntityType="Self.ARMOR_DEFENCE_VIEW" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ARMOR_DEFENCE_VIEW].[NAME] AS [NAME], 
+    [ARMOR_DEFENCE_VIEW].[DEFENCE] AS [DEFENCE], 
+    [ARMOR_DEFENCE_VIEW].[ARMOR_TYPE_ID] AS [ARMOR_TYPE_ID]
+    FROM [dbo].[ARMOR_DEFENCE_VIEW] AS [ARMOR_DEFENCE_VIEW]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__ARMOR__ARMOR_TYP__4AB81AF0" Association="Self.FK__ARMOR__ARMOR_TYP__4AB81AF0">
+            <End Role="ARMOR_TYPE" EntitySet="ARMOR_TYPE" />
+            <End Role="ARMOR" EntitySet="ARMOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ELEMENT_O__ARMOR__5535A963" Association="Self.FK__ELEMENT_O__ARMOR__5535A963">
+            <End Role="ARMOR" EntitySet="ARMOR" />
+            <End Role="ELEMENT_OF_ARMOR" EntitySet="ELEMENT_OF_ARMOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ELEMENT_O__PART___5441852A" Association="Self.FK__ELEMENT_O__PART___5441852A">
+            <End Role="PART_OF_ARMOR" EntitySet="PART_OF_ARMOR" />
+            <End Role="ELEMENT_OF_ARMOR" EntitySet="ELEMENT_OF_ARMOR" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="I11_Leonov_AISModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ARMOR_TYPE_ID" Type="Int32" Nullable="false" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ARMOR_TYPE" Relationship="Self.FK__ARMOR__ARMOR_TYP__4AB81AF0" FromRole="ARMOR" ToRole="ARMOR_TYPE" />
+          <NavigationProperty Name="ELEMENT_OF_ARMOR" Relationship="Self.FK__ELEMENT_O__ARMOR__5535A963" FromRole="ARMOR" ToRole="ELEMENT_OF_ARMOR" />
+        </EntityType>
+        <EntityType Name="ARMOR_TYPE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ARMOR" Relationship="Self.FK__ARMOR__ARMOR_TYP__4AB81AF0" FromRole="ARMOR_TYPE" ToRole="ARMOR" />
+        </EntityType>
+        <EntityType Name="ELEMENT_OF_ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DEV_ID" Type="String" MaxLength="8" FixedLength="true" Unicode="false" />
+          <Property Name="PART_ID" Type="Int32" Nullable="false" />
+          <Property Name="ARMOR_ID" Type="Int32" Nullable="false" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IMG_URL" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="WEIGHT" Type="Double" Nullable="false" />
+          <Property Name="DEFENCE" Type="Int32" Nullable="false" />
+          <Property Name="PRICE" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ARMOR" Relationship="Self.FK__ELEMENT_O__ARMOR__5535A963" FromRole="ELEMENT_OF_ARMOR" ToRole="ARMOR" />
+          <NavigationProperty Name="PART_OF_ARMOR" Relationship="Self.FK__ELEMENT_O__PART___5441852A" FromRole="ELEMENT_OF_ARMOR" ToRole="PART_OF_ARMOR" />
+        </EntityType>
+        <EntityType Name="PART_OF_ARMOR">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ELEMENT_OF_ARMOR" Relationship="Self.FK__ELEMENT_O__PART___5441852A" FromRole="PART_OF_ARMOR" ToRole="ELEMENT_OF_ARMOR" />
+        </EntityType>
+        <Association Name="FK__ARMOR__ARMOR_TYP__4AB81AF0">
+          <End Role="ARMOR_TYPE" Type="Self.ARMOR_TYPE" Multiplicity="1" />
+          <End Role="ARMOR" Type="Self.ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARMOR_TYPE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ARMOR">
+              <PropertyRef Name="ARMOR_TYPE_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ELEMENT_O__ARMOR__5535A963">
+          <End Role="ARMOR" Type="Self.ARMOR" Multiplicity="1" />
+          <End Role="ELEMENT_OF_ARMOR" Type="Self.ELEMENT_OF_ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ARMOR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ELEMENT_OF_ARMOR">
+              <PropertyRef Name="ARMOR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ELEMENT_O__PART___5441852A">
+          <End Role="PART_OF_ARMOR" Type="Self.PART_OF_ARMOR" Multiplicity="1" />
+          <End Role="ELEMENT_OF_ARMOR" Type="Self.ELEMENT_OF_ARMOR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PART_OF_ARMOR">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ELEMENT_OF_ARMOR">
+              <PropertyRef Name="PART_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DataBaseContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ARMOR" EntityType="Self.ARMOR" />
+          <EntitySet Name="ARMOR_TYPE" EntityType="Self.ARMOR_TYPE" />
+          <EntitySet Name="ELEMENT_OF_ARMOR" EntityType="Self.ELEMENT_OF_ARMOR" />
+          <EntitySet Name="PART_OF_ARMOR" EntityType="Self.PART_OF_ARMOR" />
+          <AssociationSet Name="FK__ARMOR__ARMOR_TYP__4AB81AF0" Association="Self.FK__ARMOR__ARMOR_TYP__4AB81AF0">
+            <End Role="ARMOR_TYPE" EntitySet="ARMOR_TYPE" />
+            <End Role="ARMOR" EntitySet="ARMOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ELEMENT_O__ARMOR__5535A963" Association="Self.FK__ELEMENT_O__ARMOR__5535A963">
+            <End Role="ARMOR" EntitySet="ARMOR" />
+            <End Role="ELEMENT_OF_ARMOR" EntitySet="ELEMENT_OF_ARMOR" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ELEMENT_O__PART___5441852A" Association="Self.FK__ELEMENT_O__PART___5441852A">
+            <End Role="PART_OF_ARMOR" EntitySet="PART_OF_ARMOR" />
+            <End Role="ELEMENT_OF_ARMOR" EntitySet="ELEMENT_OF_ARMOR" />
+          </AssociationSet>
+          <EntitySet Name="ARMOR_DEFENCE_VIEW" EntityType="I11_Leonov_AISModel.ARMOR_DEFENCE_VIEW" />
+        </EntityContainer>
+        <EntityType Name="ARMOR_DEFENCE_VIEW">
+          <Key>
+            <PropertyRef Name="NAME" />
+            <PropertyRef Name="ARMOR_TYPE_ID" />
+          </Key>
+          <Property Name="NAME" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DEFENCE" Type="Int32" />
+          <Property Name="ARMOR_TYPE_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище I11_Leonov_AISModelContainer" CdmEntityContainer="DataBaseContext">
+          <EntitySetMapping Name="ARMOR">
+            <EntityTypeMapping TypeName="I11_Leonov_AISModel.ARMOR">
+              <MappingFragment StoreEntitySet="ARMOR">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ARMOR_TYPE_ID" ColumnName="ARMOR_TYPE_ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ARMOR_TYPE">
+            <EntityTypeMapping TypeName="I11_Leonov_AISModel.ARMOR_TYPE">
+              <MappingFragment StoreEntitySet="ARMOR_TYPE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ELEMENT_OF_ARMOR">
+            <EntityTypeMapping TypeName="I11_Leonov_AISModel.ELEMENT_OF_ARMOR">
+              <MappingFragment StoreEntitySet="ELEMENT_OF_ARMOR">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DEV_ID" ColumnName="DEV_ID" />
+                <ScalarProperty Name="PART_ID" ColumnName="PART_ID" />
+                <ScalarProperty Name="ARMOR_ID" ColumnName="ARMOR_ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+                <ScalarProperty Name="IMG_URL" ColumnName="IMG_URL" />
+                <ScalarProperty Name="WEIGHT" ColumnName="WEIGHT" />
+                <ScalarProperty Name="DEFENCE" ColumnName="DEFENCE" />
+                <ScalarProperty Name="PRICE" ColumnName="PRICE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PART_OF_ARMOR">
+            <EntityTypeMapping TypeName="I11_Leonov_AISModel.PART_OF_ARMOR">
+              <MappingFragment StoreEntitySet="PART_OF_ARMOR">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ARMOR_DEFENCE_VIEW">
+            <EntityTypeMapping TypeName="I11_Leonov_AISModel.ARMOR_DEFENCE_VIEW">
+              <MappingFragment StoreEntitySet="ARMOR_DEFENCE_VIEW">
+                <ScalarProperty Name="ARMOR_TYPE_ID" ColumnName="ARMOR_TYPE_ID" />
+                <ScalarProperty Name="DEFENCE" ColumnName="DEFENCE" />
+                <ScalarProperty Name="NAME" ColumnName="NAME" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -17,20 +17,9 @@ namespace IDZ_SERVER
             Task.Run(serverController.AwaitRequestForDeleteData);
             Task.Run(serverController.AwaitRequestForEditData);
             Task.Run(serverController.AwaitRequestForUpdateData);
+            Task.Run(serverController.AwaitRequestForGetArmorDefence);
             Console.WriteLine("UDP сервер запущен...");
-            while (true)
-            {
-                Console.WriteLine("Нажмите 1 для генерации отчета Word");
-                string choose = Console.ReadLine();
-                if (choose == "1")
-                {
-                    serverController.CreateReport();
-                }
-                else
-                {
-                    Console.WriteLine("Неправильный ввод");
-                }
-            }
+            Console.ReadLine();
         }
     }
 }

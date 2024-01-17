@@ -142,7 +142,7 @@ namespace IDZ_SERVER.Controllers.Parser
             else if (elementName.Contains("перчатки") || elementName.Contains("наручи")) return "перчатки";
             else if (elementName.Contains("капюшон") || elementName.Contains("шлем") || elementName.Contains("головной убор")) return "головной убор";
             else if (elementName.Contains("щит")) return "щит";
-            else return "артефакт";
+            return "артефакт";
         }
     }
 }

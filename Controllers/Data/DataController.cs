@@ -9,6 +9,23 @@ namespace IDZ_SERVER.Controllers.Data
 {
     public class DataController
     {
+        public List<DataBase.ViewModels.ArmorDefence> GetArmorDefenceList()
+        {
+            List <DataBase.ViewModels.ArmorDefence > list = new List<DataBase.ViewModels.ArmorDefence> ();
+            using (DataBaseContext db = new DataBaseContext())
+            {
+                foreach (DataBase.Entities.ARMOR_DEFENCE_VIEW armorDefence in db.ARMOR_DEFENCE_VIEW.ToList())
+                {
+                    list.Add(new DataBase.ViewModels.ArmorDefence
+                    {
+                        ArmorName = armorDefence.NAME,
+                        Defence = armorDefence.DEFENCE,
+                        ArmorType = db.ARMOR_TYPE.Where(p => p.ID == armorDefence.ARMOR_TYPE_ID).First().NAME
+                    });
+                }
+            }
+            return list;
+        }
         public List<ELEMENT_OF_ARMOR> GetElementsOfArmors()
         {
             List<ELEMENT_OF_ARMOR> list;

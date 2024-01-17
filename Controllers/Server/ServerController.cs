@@ -9,7 +9,6 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using IDZ_SERVER.Controllers.Data;
 using IDZ_SERVER.DataBase.Entities;
-using IDZ_SERVER.Reports;
 
 namespace IDZ_SERVER.Controllers.Server
 {
@@ -21,14 +20,34 @@ namespace IDZ_SERVER.Controllers.Server
         private int localPortEdit = int.Parse(ConfigurationManager.AppSettings.Get("LocalPortEdit")); // для добавления данных
         private int localPortDelete = int.Parse(ConfigurationManager.AppSettings.Get("LocalPortDelete"));
         private int localPortUpdate = int.Parse(ConfigurationManager.AppSettings.Get("LocalPortUpdate"));
+        private int localPortArmorDefence = int.Parse(ConfigurationManager.AppSettings.Get("LocalPortArmorDefence"));
         private int remotePort = int.Parse(ConfigurationManager.AppSettings.Get("RemotePort"));
 
         private DataController dataController = new DataController();
+        private string GetArmorDefenceList()
+        {
+            List<DataBase.ViewModels.ArmorDefence> list = dataController.GetArmorDefenceList();
+            string armorDefence = JsonSerializer.Serialize(list);
+            return armorDefence;
+        }
         private string GetElementsOfArmors()
         {
             List<ELEMENT_OF_ARMOR> list = dataController.GetElementsOfArmors();
             string armors = JsonSerializer.Serialize(list);
             return armors;
+        }
+        public async Task AwaitRequestForGetArmorDefence()
+        {
+            using (UdpClient receiver = new UdpClient(localPortArmorDefence))
+            {
+                while (true)
+                {
+                    // получаем данные
+                    var result = await receiver.ReceiveAsync();
+                    string armorsDefence = GetArmorDefenceList();
+                    await SendMessageAsync(armorsDefence);
+                }
+            }
         }
         public async Task AwaitRequestForReadData()
         {
@@ -107,11 +126,6 @@ namespace IDZ_SERVER.Controllers.Server
 
                 }
             }
-        }
-        public void CreateReport()
-        {
-            ReportCreator reportCreator = new ReportCreator();
-            reportCreator.GeneratWordReport();
         }
         private async Task SendMessageAsync(string message)
         {
